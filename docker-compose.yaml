@@ -5,8 +5,19 @@ services:
     image: infracloudio/csvserver:latest
     container_name: csvserver
     ports:
-      - "9393:9300"  # Map host port 9393 to container port 9300
+      - "9393:9300"
     volumes:
-      - ./inputFile:/csvserver/inputdata  # Mount inputFile into the container
+      - ./inputFile:/csvserver/inputdata
     env_file:
-      - csvserver.env  # Load environment variables from csvserver.env
+      - csvserver.env
+
+  prometheus:
+    image: prom/prometheus:v2.45.2
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - csvserver
+
